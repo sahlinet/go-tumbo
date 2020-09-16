@@ -20,6 +20,14 @@ task-config: &task-config
       path: go/src/github.com/sahlinet/go-tumbo
   params:
     GO111MODULE: "on"
+
+task-config: &task-config
+  platform: linux
+  inputs:
+    - name: go-tumbo-git
+      path: go/src/github.com/sahlinet/go-tumbo
+  params:
+    GO111MODULE: "on"
   run:
     path: /bin/sh
     args:
@@ -32,6 +40,7 @@ task-config: &task-config
         go vet ./...
         go test -v ./...
 
+
 jobs:
   - name: golang-1.14
     public: true
@@ -40,7 +49,31 @@ jobs:
         trigger: true
       - get: golang-1.14.x-image
         trigger: true
+
       - task: run-tests
         image: golang-1.14.x-image
         config:
           << : *task-config
+          run:
+            path: /bin/sh
+            args:
+              - -c
+              - |
+                GOPATH=$PWD/go
+                cd go/src/github.com/sahlinet/go-tumbo
+                go vet ./...
+                go test -v ./...
+
+
+      - task: build-binary
+        image: golang-1.14.x-image
+        config:
+          << : *task-config
+          run:
+            path: /bin/sh
+            args:
+              - -c
+              - |
+                GOPATH=$PWD/go
+                cd go/src/github.com/sahlinet/go-tumbo
+                go build ./cmd/tumbo

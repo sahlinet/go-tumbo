@@ -4,8 +4,9 @@ import (
 	"flag"
 	"log"
 
-	"github.com/sahlinet/tumbo/pkg/client"
-	srv "github.com/sahlinet/tumbo/pkg/server"
+	"github.com/sahlinet/go-tumbo/pkg/app"
+	"github.com/sahlinet/go-tumbo/pkg/client"
+	"github.com/sahlinet/go-tumbo/pkg/config"
 )
 
 func main() {
@@ -13,9 +14,16 @@ func main() {
 	flag.Parse()
 	log.Printf("Running as server: %t", *server)
 
-	if *server {
+	/*if *server {
 		srv.Start()
 	}
+	*/
+
+	config := config.GetConfig()
+
+	app := &app.App{}
+	app.Initialize(config)
+	app.Run("0.0.0.0:3000")
 
 	client.GetWorker()
 }

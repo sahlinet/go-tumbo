@@ -82,4 +82,5 @@ jobs:
               - |
                 GOPATH=$PWD/go
                 cd go/src/github.com/sahlinet/go-tumbo
+                go generate ./...
                 go build ./cmd/tumbo

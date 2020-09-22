@@ -1,5 +1,9 @@
 package worker
 
+import (
+	"gorm.io/gorm"
+)
+
 type Config struct {
 }
 
@@ -18,7 +22,9 @@ type Workers interface {
 }
 
 type Worker struct {
-	Running bool
+	gorm.Model
+	Name    string `gorm:"unique" json:name`
+	Running bool   `json:"running"`
 }
 
 func (w *Worker) Start() error {

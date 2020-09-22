@@ -13,8 +13,8 @@ func TestWorker_Start(t *testing.T) {
 	}{
 		// TODO: Add test cases.
 		{
-			name: "huhu",
-			fields: fields{true},
+			name:    "huhu",
+			fields:  fields{true},
 			wantErr: false,
 		},
 	}

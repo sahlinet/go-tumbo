@@ -3,20 +3,20 @@
 package main
 
 import (
-    "bytes"
-    "fmt"
-    "go/format"
-    "io/ioutil"
-    "log"
-    "os"
-    "path/filepath"
-    "strings"
-    "text/template"
+	"bytes"
+	"fmt"
+	"go/format"
+	"io/ioutil"
+	"log"
+	"os"
+	"path/filepath"
+	"strings"
+	"text/template"
 )
 
 const (
-    blobFileName string = "blob.go"
-    embedFolder  string = "../../static"
+	blobFileName string = "blob.go"
+	embedFolder  string = "../../static"
 )
 
 // Define vars for build template
@@ -33,76 +33,76 @@ func init() {
 )
 
 func fmtByteSlice(s []byte) string {
-    builder := strings.Builder{}
+	builder := strings.Builder{}
 
-    for _, v := range s {
-        builder.WriteString(fmt.Sprintf("%d,", int(v)))
-    }
+	for _, v := range s {
+		builder.WriteString(fmt.Sprintf("%d,", int(v)))
+	}
 
-    return builder.String()
+	return builder.String()
 }
 
 func main() {
-    // Checking directory with files
-    if _, err := os.Stat(embedFolder); os.IsNotExist(err) {
-        log.Fatal("Configs directory does not exists!")
-    }
+	// Checking directory with files
+	if _, err := os.Stat(embedFolder); os.IsNotExist(err) {
+		log.Fatal("Configs directory does not exists!")
+	}
 
-    // Create map for filenames
-    configs := make(map[string][]byte)
+	// Create map for filenames
+	configs := make(map[string][]byte)
 
-    // Walking through embed directory
-    err := filepath.Walk(embedFolder, func(path string, info os.FileInfo, err error) error {
-        relativePath := filepath.ToSlash(strings.TrimPrefix(path, embedFolder))
+	// Walking through embed directory
+	err := filepath.Walk(embedFolder, func(path string, info os.FileInfo, err error) error {
+		relativePath := filepath.ToSlash(strings.TrimPrefix(path, embedFolder))
 
-        if info.IsDir() {
-            // Skip directories
-            log.Println(path, "is a directory, skipping...")
-            return nil
-        } else {
-            // If element is a simple file, embed
-            log.Println(path, "is a file, packing in...")
+		if info.IsDir() {
+			// Skip directories
+			log.Println(path, "is a directory, skipping...")
+			return nil
+		} else {
+			// If element is a simple file, embed
+			log.Println(path, "is a file, packing in...")
 
-            b, err := ioutil.ReadFile(path)
-            if err != nil {
-                // If file not reading
-                log.Printf("Error reading %s: %s", path, err)
-                return err
-            }
+			b, err := ioutil.ReadFile(path)
+			if err != nil {
+				// If file not reading
+				log.Printf("Error reading %s: %s", path, err)
+				return err
+			}
 
-            // Add file name to map
-            configs[relativePath] = b
-        }
+			// Add file name to map
+			configs[relativePath] = b
+		}
 
-        return nil
-    })
-    if err != nil {
-        log.Fatal("Error walking through embed directory:", err)
-    }
+		return nil
+	})
+	if err != nil {
+		log.Fatal("Error walking through embed directory:", err)
+	}
 
-    // Create blob file
-    f, err := os.Create(blobFileName)
-    if err != nil {
-        log.Fatal("Error creating blob file:", err)
-    }
-    defer f.Close()
+	// Create blob file
+	f, err := os.Create(blobFileName)
+	if err != nil {
+		log.Fatal("Error creating blob file:", err)
+	}
+	defer f.Close()
 
-    // Create buffer
-    builder := &bytes.Buffer{}
+	// Create buffer
+	builder := &bytes.Buffer{}
 
-    // Execute template
-    if err = tmpl.Execute(builder, configs); err != nil {
-        log.Fatal("Error executing template", err)
-    }
+	// Execute template
+	if err = tmpl.Execute(builder, configs); err != nil {
+		log.Fatal("Error executing template", err)
+	}
 
-    // Formatting generated code
-    data, err := format.Source(builder.Bytes())
-    if err != nil {
-        log.Fatal("Error formatting generated code", err)
-    }
+	// Formatting generated code
+	data, err := format.Source(builder.Bytes())
+	if err != nil {
+		log.Fatal("Error formatting generated code", err)
+	}
 
-    // Writing blob file
-    if err = ioutil.WriteFile(blobFileName, data, os.ModePerm); err != nil {
-        log.Fatal("Error writing blob file", err)
-    }
+	// Writing blob file
+	if err = ioutil.WriteFile(blobFileName, data, os.ModePerm); err != nil {
+		log.Fatal("Error writing blob file", err)
+	}
 }

@@ -22,4 +22,3 @@ func NewProject() (*Project, error) {
 	db.Create(&p)
 	return &p, nil
 }
-

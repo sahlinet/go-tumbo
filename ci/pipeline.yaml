@@ -109,5 +109,5 @@ jobs:
             args:
               - -c
               - |
-                cd go-tumbo-git/web
+                cd go-tumbo-git/web/elm
                 elm make src/Main.elm

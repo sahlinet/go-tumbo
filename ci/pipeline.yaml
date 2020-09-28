@@ -13,6 +13,13 @@ resources:
       repository: golang
       tag: 1.14-stretch
 
+  - name: elm-image
+    type: registry-image
+    icon: docker
+    source:
+      repository: codesimple/elm
+      tag: 0.19
+
 task-config: &task-config
   platform: linux
   inputs:
@@ -84,3 +91,23 @@ jobs:
                 cd go/src/github.com/sahlinet/go-tumbo
                 go generate ./...
                 go build ./cmd/tumbo
+  - name: web
+    public: true
+    plan:
+      - get: go-tumbo-git
+        trigger: true
+      - get: elm-image
+      - task: make-elm
+        image: elm-image
+        config:
+          platform: linux
+          inputs:
+            - name: go-tumbo-git
+              path: go-tumbo-git
+          run:
+            path: /bin/sh
+            args:
+              - -c
+              - |
+                cd go-tumbo-git/web
+                elm make src/Main.elm

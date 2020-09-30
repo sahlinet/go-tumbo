@@ -55,8 +55,6 @@ jobs:
       - get: go-tumbo-git
         trigger: true
       - get: golang-1.14.x-image
-        trigger: true
-
       - task: run-tests
         image: golang-1.14.x-image
         config:

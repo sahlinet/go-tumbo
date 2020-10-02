@@ -4,14 +4,12 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gorilla/mux"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sahlinet/go-tumbo/pkg/app/handler"
 	"github.com/sahlinet/go-tumbo/pkg/config"
-	"github.com/sahlinet/go-tumbo/pkg/models"
 )
 
 type App struct {

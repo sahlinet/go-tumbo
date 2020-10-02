@@ -10,7 +10,6 @@ https://github.com/Massad/gin-boilerplate
 
 A project is a unit and represents an application. A project belongs to a team and its implementation is stored in a Git repository.
 
-
 - Service
 
 A Service is running on the execution layer and groups multiple functions.
@@ -79,11 +78,15 @@ They receive the same permissions, except they cannot change the team.
 
 ## Frontend
 
-https://developer.okta.com/blog/2018/10/23/build-a-single-page-app-with-go-and-vue
+### Implementation
 
-### Component Framework
-https://vuetifyjs.com/en/
+#### Elm
 
+Frontend Framework:  https://elm-lang.org/ - Component Framework: https://elm-ui.netlify.app/
+
+#### Minify
+
+https://github.com/tdewolff/minify
 
 # CLI
 

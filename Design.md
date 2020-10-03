@@ -2,7 +2,9 @@
 
 ## Layout
 
-https://github.com/Massad/gin-boilerplate
+
+1. https://github.com/eddycjy/go-gin-example
+2. https://github.com/Massad/gin-boilerplate
 
 ## Terms
 
